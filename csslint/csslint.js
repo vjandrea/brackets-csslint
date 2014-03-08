@@ -4009,7 +4009,42 @@ var Properties = {
     
     //Z
     "z-index"                       : "<integer> | auto | inherit",
-    "zoom"                          : "<number> | <percentage> | normal"
+    "zoom"                          : "<number> | <percentage> | normal",
+  
+    //SVG RELATED KEYWORDS
+    "clip-path"                     : "",
+    "clip-rule"                     : "",
+    "color-interpolation-filters"   : "",
+    "color-interpolation"           : "",
+    "color-rendering"               : "",
+    "enable-background"             : "",
+    "fill-opacity"                  : "",
+    "fill-rule"                     : "",
+    "fill"                          : "",
+    "flood-color"                   : "",
+    "flood-opacity"                 : "",
+    "glyph-orientation-horizontal"  : "",
+    "glyph-orientation-vertical"    : "",
+    "kerning"                       : "",
+    "lighting-color"                : "",
+    "marker-end"                    : "",
+    "marker-mid"                    : "",
+    "marker-start"                  : "",
+    "marker"                        : "",
+    "mask"                          : "",
+    "shape-rendering"               : "",
+    "stop-color"                    : "",
+    "stop-opacity"                  : "",
+    "stroke-dasharray"              : "",
+    "stroke-dashoffset"             : "",
+    "stroke-linecap"                : "",
+    "stroke-linejoin"               : "",
+    "stroke-miterlimit"             : "",
+    "stroke-opacity"                : "",
+    "stroke-width"                  : "",
+    "stroke"                        : "",
+    "text-anchor"                   : "",
+    "writing-mode"                  : ""
 };
 
 /*global SyntaxUnit, Parser*/
