@@ -4041,7 +4041,7 @@ var Properties = {
     "stroke-linejoin"               : "",
     "stroke-miterlimit"             : "",
     "stroke-opacity"                : "",
-    "stroke-width"                  : "<border-width>", // maybe a separate <stroke-width> parser may be better
+    "stroke-width"                  : "<stroke-width>",
     "stroke"                        : "<color> | none",
     "text-anchor"                   : "",
     "writing-mode"                  : ""
@@ -6258,6 +6258,10 @@ var ValidationTypes = {
             return part.type == "function" && (part.name == "rect" || part.name == "inset-rect");
         },
         
+        "<stroke-width>": function(part){
+            return this["<length>"](part) || ValidationTypes.isLiteral(part, "thin | medium | thick");
+        },
+
         "<time>": function(part) {
             return part.type == "time";
         }
