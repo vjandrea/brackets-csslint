@@ -3530,12 +3530,21 @@ nth
   ;
 */
 
+// Included @nzakas/parser-lib pull request
+// https://github.com/nzakas/parser-lib/pull/97/files
+
 /*global Validation, ValidationTypes, ValidationError*/
 var Properties = {
 
     //A
+    "align-items"                   : "flex-start | flex-end | center | baseline | stretch",
+    "align-content"                 : "flex-start | flex-end | center | space-between | space-around | stretch",
+    "align-self"                    : "auto | flex-start | flex-end | center | baseline | stretch",
+    "-webkit-align-items"           : "flex-start | flex-end | center | baseline | stretch",
+    "-webkit-align-content"         : "flex-start | flex-end | center | space-between | space-around | stretch",
+    "-webkit-align-self"            : "auto | flex-start | flex-end | center | baseline | stretch",
     "alignment-adjust"              : "auto | baseline | before-edge | text-before-edge | middle | central | after-edge | text-after-edge | ideographic | alphabetic | hanging | mathematical | <percentage> | <length>",
-    "alignment-baseline"            : "baseline | use-script | before-edge | text-before-edge | after-edge | text-after-edge | central | middle | ideographic | alphabetic | hanging | mathematical",
+    "alignment-baseline"            : "auto | baseline | use-script | before-edge | text-before-edge | after-edge | text-after-edge | central | middle | ideographic | alphabetic | hanging | mathematical | inherit",
     "animation"                     : 1,
     "animation-delay"               : { multi: "<time>", comma: true },
     "animation-direction"           : { multi: "normal | alternate", comma: true },
@@ -3544,7 +3553,7 @@ var Properties = {
     "animation-name"                : { multi: "none | <ident>", comma: true },
     "animation-play-state"          : { multi: "running | paused", comma: true },
     "animation-timing-function"     : 1,
-    
+
     //vendor prefixed
     "-moz-animation-delay"               : { multi: "<time>", comma: true },
     "-moz-animation-direction"           : { multi: "normal | alternate", comma: true },
@@ -3552,28 +3561,28 @@ var Properties = {
     "-moz-animation-iteration-count"     : { multi: "<number> | infinite", comma: true },
     "-moz-animation-name"                : { multi: "none | <ident>", comma: true },
     "-moz-animation-play-state"          : { multi: "running | paused", comma: true },
-    
+
     "-ms-animation-delay"               : { multi: "<time>", comma: true },
     "-ms-animation-direction"           : { multi: "normal | alternate", comma: true },
     "-ms-animation-duration"            : { multi: "<time>", comma: true },
     "-ms-animation-iteration-count"     : { multi: "<number> | infinite", comma: true },
     "-ms-animation-name"                : { multi: "none | <ident>", comma: true },
     "-ms-animation-play-state"          : { multi: "running | paused", comma: true },
-    
+
     "-webkit-animation-delay"               : { multi: "<time>", comma: true },
     "-webkit-animation-direction"           : { multi: "normal | alternate", comma: true },
     "-webkit-animation-duration"            : { multi: "<time>", comma: true },
     "-webkit-animation-iteration-count"     : { multi: "<number> | infinite", comma: true },
     "-webkit-animation-name"                : { multi: "none | <ident>", comma: true },
     "-webkit-animation-play-state"          : { multi: "running | paused", comma: true },
-    
+
     "-o-animation-delay"               : { multi: "<time>", comma: true },
     "-o-animation-direction"           : { multi: "normal | alternate", comma: true },
     "-o-animation-duration"            : { multi: "<time>", comma: true },
     "-o-animation-iteration-count"     : { multi: "<number> | infinite", comma: true },
     "-o-animation-name"                : { multi: "none | <ident>", comma: true },
-    "-o-animation-play-state"          : { multi: "running | paused", comma: true },        
-    
+    "-o-animation-play-state"          : { multi: "running | paused", comma: true },
+
     "appearance"                    : "icon | window | desktop | workspace | document | tooltip | dialog | button | push-button | hyperlink | radio-button | checkbox | menu-item | tab | menu | menubar | pull-down-menu | pop-up-menu | list-menu | radio-group | checkbox-group | outline-tree | range | field | combo-box | signature | password | normal | none | inherit",
     "azimuth"                       : function (expression) {
         var simple      = "<angle> | leftwards | rightwards | inherit",
@@ -3581,13 +3590,13 @@ var Properties = {
             behind      = false,
             valid       = false,
             part;
-        
+
         if (!ValidationTypes.isAny(expression, simple)) {
             if (ValidationTypes.isAny(expression, "behind")) {
                 behind = true;
                 valid = true;
             }
-            
+
             if (ValidationTypes.isAny(expression, direction)) {
                 valid = true;
                 if (!behind) {
@@ -3595,7 +3604,7 @@ var Properties = {
                 }
             }
         }
-        
+
         if (expression.hasNext()) {
             part = expression.next();
             if (valid) {
@@ -3603,9 +3612,9 @@ var Properties = {
             } else {
                 throw new ValidationError("Expected (<'azimuth'>) but found '" + part + "'.", part.line, part.col);
             }
-        }        
+        }
     },
-    
+
     //B
     "backface-visibility"           : "visible | hidden",
     "background"                    : 1,
@@ -3617,7 +3626,7 @@ var Properties = {
     "background-position"           : { multi: "<bg-position>", comma: true },
     "background-repeat"             : { multi: "<repeat-style>" },
     "background-size"               : { multi: "<bg-size>", comma: true },
-    "baseline-shift"                : "baseline | sub | super | <percentage> | <length>",
+    "baseline-shift"                : "baseline | sub | super | <percentage> | <length> | inherit",
     "behavior"                      : 1,
     "binding"                       : 1,
     "bleed"                         : "<length>",
@@ -3638,19 +3647,19 @@ var Properties = {
     "border-image-outset"           : { multi: "<length> | <number>", max: 4 },
     "border-image-repeat"           : { multi: "stretch | repeat | round", max: 2 },
     "border-image-slice"            : function(expression) {
-        
+
         var valid   = false,
             numeric = "<number> | <percentage>",
             fill    = false,
             count   = 0,
             max     = 4,
             part;
-        
+
         if (ValidationTypes.isAny(expression, "fill")) {
             fill = true;
             valid = true;
         }
-        
+
         while (expression.hasNext() && count < max) {
             valid = ValidationTypes.isAny(expression, numeric);
             if (!valid) {
@@ -3658,14 +3667,14 @@ var Properties = {
             }
             count++;
         }
-        
-        
+
+
         if (!fill) {
             ValidationTypes.isAny(expression, "fill");
         } else {
             valid = true;
         }
-        
+
         if (expression.hasNext()) {
             part = expression.next();
             if (valid) {
@@ -3673,7 +3682,7 @@ var Properties = {
             } else {
                 throw new ValidationError("Expected ([<number> | <percentage>]{1,4} && fill?) but found '" + part + "'.", part.line, part.col);
             }
-        }         
+        }
     },
     "border-image-source"           : "<image> | none",
     "border-image-width"            : { multi: "<length> | <percentage> | <number> | auto", max: 4 },
@@ -3682,7 +3691,7 @@ var Properties = {
     "border-left-style"             : "<border-style>",
     "border-left-width"             : "<border-width>",
     "border-radius"                 : function(expression) {
-        
+
         var valid   = false,
             simple = "<length> | <percentage> | inherit",
             slash   = false,
@@ -3694,7 +3703,7 @@ var Properties = {
         while (expression.hasNext() && count < max) {
             valid = ValidationTypes.isAny(expression, simple);
             if (!valid) {
-            
+
                 if (expression.peek() == "/" && count > 0 && !slash) {
                     slash = true;
                     max = count + 5;
@@ -3705,7 +3714,7 @@ var Properties = {
             }
             count++;
         }
-        
+
         if (expression.hasNext()) {
             part = expression.next();
             if (valid) {
@@ -3713,7 +3722,7 @@ var Properties = {
             } else {
                 throw new ValidationError("Expected (<'border-radius'>) but found '" + part + "'.", part.line, part.col);
             }
-        }         
+        }
     },
     "border-right"                  : "<border-width> || <border-style> || <color>",
     "border-right-color"            : "<color> | inherit",
@@ -3728,40 +3737,54 @@ var Properties = {
     "border-top-style"              : "<border-style>",
     "border-top-width"              : "<border-width>",
     "border-width"                  : { multi: "<border-width>", max: 4 },
-    "bottom"                        : "<margin-width> | inherit", 
-    "box-align"                     : "start | end | center | baseline | stretch",        //http://www.w3.org/TR/2009/WD-css3-flexbox-20090723/
-    "box-decoration-break"          : "slice |clone",
-    "box-direction"                 : "normal | reverse | inherit",
-    "box-flex"                      : "<number>",
-    "box-flex-group"                : "<integer>",
-    "box-lines"                     : "single | multiple",
-    "box-ordinal-group"             : "<integer>",
-    "box-orient"                    : "horizontal | vertical | inline-axis | block-axis | inherit",
-    "box-pack"                      : "start | end | center | justify",
+    "bottom"                        : "<margin-width> | inherit",
+    "-moz-box-align"                : "start | end | center | baseline | stretch",
+    "-moz-box-decoration-break"     : "slice |clone",
+    "-moz-box-direction"            : "normal | reverse | inherit",
+    "-moz-box-flex"                 : "<number>",
+    "-moz-box-flex-group"           : "<integer>",
+    "-moz-box-lines"                : "single | multiple",
+    "-moz-box-ordinal-group"        : "<integer>",
+    "-moz-box-orient"               : "horizontal | vertical | inline-axis | block-axis | inherit",
+    "-moz-box-pack"                 : "start | end | center | justify",
+    "-webkit-box-align"             : "start | end | center | baseline | stretch",
+    "-webkit-box-decoration-break"  : "slice |clone",
+    "-webkit-box-direction"         : "normal | reverse | inherit",
+    "-webkit-box-flex"              : "<number>",
+    "-webkit-box-flex-group"        : "<integer>",
+    "-webkit-box-lines"             : "single | multiple",
+    "-webkit-box-ordinal-group"     : "<integer>",
+    "-webkit-box-orient"            : "horizontal | vertical | inline-axis | block-axis | inherit",
+    "-webkit-box-pack"              : "start | end | center | justify",
     "box-shadow"                    : function (expression) {
         var result      = false,
             part;
 
         if (!ValidationTypes.isAny(expression, "none")) {
-            Validation.multiProperty("<shadow>", expression, true, Infinity);                       
+            Validation.multiProperty("<shadow>", expression, true, Infinity);
         } else {
             if (expression.hasNext()) {
                 part = expression.next();
                 throw new ValidationError("Expected end of value but found '" + part + "'.", part.line, part.col);
-            }   
+            }
         }
     },
     "box-sizing"                    : "content-box | border-box | inherit",
     "break-after"                   : "auto | always | avoid | left | right | page | column | avoid-page | avoid-column",
     "break-before"                  : "auto | always | avoid | left | right | page | column | avoid-page | avoid-column",
     "break-inside"                  : "auto | avoid | avoid-page | avoid-column",
-    
+
     //C
     "caption-side"                  : "top | bottom | inherit",
     "clear"                         : "none | right | left | both | inherit",
     "clip"                          : 1,
+    "clip-path"                     : 1,
+    "clip-rule"                     : "nonzero | evenodd | inherit",
     "color"                         : "<color> | inherit",
+    "color-interpolation"           : "auto | sRGB | linearRGB | inherit",
+    "color-interpolation-filters"   : "auto | sRGB | linearRGB | inherit",
     "color-profile"                 : 1,
+    "color-rendering"               : "auto | optimizeSpeed | optimizeQuality | inherit",
     "column-count"                  : "<integer> | auto",                      //http://www.w3.org/TR/css3-multicol/
     "column-fill"                   : "auto | balance",
     "column-gap"                    : "<length> | normal",
@@ -3780,28 +3803,54 @@ var Properties = {
     "cue-after"                     : 1,
     "cue-before"                    : 1,
     "cursor"                        : 1,
-    
+
     //D
     "direction"                     : "ltr | rtl | inherit",
-    "display"                       : "inline | block | list-item | inline-block | table | inline-table | table-row-group | table-header-group | table-footer-group | table-row | table-column-group | table-column | table-cell | table-caption | box | inline-box | grid | inline-grid | none | inherit | -moz-box | -moz-inline-block | -moz-inline-box | -moz-inline-grid | -moz-inline-stack | -moz-inline-table | -moz-grid | -moz-grid-group | -moz-grid-line | -moz-groupbox | -moz-deck | -moz-popup | -moz-stack | -moz-marker | -webkit-box | -webkit-inline-box",
-    "dominant-baseline"             : 1,
+    "display"                       : "inline | block | list-item | inline-block | table | inline-table | table-row-group | table-header-group | table-footer-group | table-row | table-column-group | table-column | table-cell | table-caption | grid | inline-grid | none | inherit | -moz-box | -moz-inline-block | -moz-inline-box | -moz-inline-grid | -moz-inline-stack | -moz-inline-table | -moz-grid | -moz-grid-group | -moz-grid-line | -moz-groupbox | -moz-deck | -moz-popup | -moz-stack | -moz-marker | -webkit-box | -webkit-inline-box | -ms-flexbox | -ms-inline-flexbox | flex | -webkit-flex | inline-flex | -webkit-inline-flex",
+    "dominant-baseline"             : "auto | use-script | no-change | reset-size | ideographic | alphabetic | hanging | mathematical | central | middle | text-after-edge | text-before-edge | inherit",
     "drop-initial-after-adjust"     : "central | middle | after-edge | text-after-edge | ideographic | alphabetic | mathematical | <percentage> | <length>",
     "drop-initial-after-align"      : "baseline | use-script | before-edge | text-before-edge | after-edge | text-after-edge | central | middle | ideographic | alphabetic | hanging | mathematical",
     "drop-initial-before-adjust"    : "before-edge | text-before-edge | central | middle | hanging | mathematical | <percentage> | <length>",
     "drop-initial-before-align"     : "caps-height | baseline | use-script | before-edge | text-before-edge | after-edge | text-after-edge | central | middle | ideographic | alphabetic | hanging | mathematical",
     "drop-initial-size"             : "auto | line | <length> | <percentage>",
     "drop-initial-value"            : "initial | <integer>",
-    
+
     //E
     "elevation"                     : "<angle> | below | level | above | higher | lower | inherit",
     "empty-cells"                   : "show | hide | inherit",
-    
+    "enable-background"             : 1,
+
     //F
+    "fill"                          : 1,
+    "fill-opacity"                  : "<number> | inherit",
+    "fill-rule"                     : "nonzero | evenodd | inherit",
     "filter"                        : 1,
     "fit"                           : "fill | hidden | meet | slice",
     "fit-position"                  : 1,
-    "float"                         : "left | right | none | inherit",    
+    "flex"                          : "none | [ <flex-grow> <flex-shrink>? || <flex-basis>",
+    "flex-basis"                    : "<width>",
+    "flex-direction"                : "row | row-reverse | column | column-reverse",
+    "flex-flow"                     : "<flex-direction> || <flex-wrap>",
+    "flex-grow"                     : "<number>",
+    "flex-shrink"                   : "<number>",
+    "flex-wrap"                     : "nowrap | wrap | wrap-reverse",
+    "-webkit-flex"                  : "none | [ <flex-grow> <flex-shrink>? || <flex-basis>",
+    "-webkit-flex-basis"            : "<width>",
+    "-webkit-flex-direction"        : "row | row-reverse | column | column-reverse",
+    "-webkit-flex-flow"             : "<flex-direction> || <flex-wrap>",
+    "-webkit-flex-grow"             : "<number>",
+    "-webkit-flex-shrink"           : "<number>",
+    "-webkit-flex-wrap"             : "nowrap | wrap | wrap-reverse",
+    "-ms-flex"                      : "[[ <number> <number>? ] || [ <length> || <percentage> || auto ] ] | none",
+    "-ms-flex-align"                : "start | end | center | stretch | baseline",
+    "-ms-flex-direction"            : "row | column | row-reverse | column-reverse | inherit",
+    "-ms-flex-order"                : "<number>",
+    "-ms-flex-pack"                 : "start | end | center | justify",
+    "-ms-flex-wrap"                 : "nowrap | wrap | wrap-reverse",
+    "float"                         : "left | right | none | inherit",
     "float-offset"                  : 1,
+    "flood-color"                   : 1,
+    "flood-opacity"                 : "<number> | inherit",
     "font"                          : 1,
     "font-family"                   : 1,
     "font-size"                     : "<absolute-size> | <relative-size> | <length> | <percentage> | inherit",
@@ -3810,8 +3859,10 @@ var Properties = {
     "font-style"                    : "normal | italic | oblique | inherit",
     "font-variant"                  : "normal | small-caps | inherit",
     "font-weight"                   : "normal | bold | bolder | lighter | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | inherit",
-    
+
     //G
+    "glyph-orientation-horizontal"  : "<angle> | inherit",
+    "glyph-orientation-vertical"    : "auto | <angle> | inherit",
     "grid-cell-stacking"            : "columns | rows | layer",
     "grid-column"                   : 1,
     "grid-columns"                  : 1,
@@ -3825,7 +3876,7 @@ var Properties = {
     "grid-row-align"                : "start | end | center | stretch",
     "grid-row-span"                 : "<integer>",
     "grid-row-sizing"               : 1,
-    
+
     //H
     "hanging-punctuation"           : 1,
     "height"                        : "<margin-width> | inherit",
@@ -3835,17 +3886,25 @@ var Properties = {
     "hyphenate-lines"               : "no-limit | <integer>",
     "hyphenate-resource"            : 1,
     "hyphens"                       : "none | manual | auto",
-    
+
     //I
     "icon"                          : 1,
     "image-orientation"             : "angle | auto",
-    "image-rendering"               : 1,
+    "image-rendering"               : "auto | optimizeSpeed | optimizeQuality | inherit",
     "image-resolution"              : 1,
     "inline-box-align"              : "initial | last | <integer>",
-    
+
+    //J
+    "justify-content"               : "flex-start | flex-end | center | space-between | space-around",
+    "-webkit-justify-content"       : "flex-start | flex-end | center | space-between | space-around",
+
+    //K
+    "kerning"                       : "auto | <length> | inherit",
+
     //L
     "left"                          : "<margin-width> | inherit",
     "letter-spacing"                : "<length> | normal | inherit",
+    "lighting-color"                : 1,
     "line-height"                   : "<number> | <length> | <percentage> | normal | inherit",
     "line-break"                    : "auto | loose | normal | strict",
     "line-stacking"                 : 1,
@@ -3856,7 +3915,7 @@ var Properties = {
     "list-style-image"              : "<uri> | none | inherit",
     "list-style-position"           : "inside | outside | inherit",
     "list-style-type"               : "disc | circle | square | decimal | decimal-leading-zero | lower-roman | upper-roman | lower-greek | lower-latin | upper-latin | armenian | georgian | lower-alpha | upper-alpha | none | inherit",
-    
+
     //M
     "margin"                        : { multi: "<margin-width> | inherit", max: 4 },
     "margin-bottom"                 : "<margin-width> | inherit",
@@ -3866,26 +3925,33 @@ var Properties = {
     "mark"                          : 1,
     "mark-after"                    : 1,
     "mark-before"                   : 1,
+    "marker"                        : 1,
+    "marker-end"                    : 1,
+    "marker-mid"                    : 1,
+    "marker-start"                  : 1,
     "marks"                         : 1,
     "marquee-direction"             : 1,
     "marquee-play-count"            : 1,
     "marquee-speed"                 : 1,
     "marquee-style"                 : 1,
+    "mask"                          : 1,
     "max-height"                    : "<length> | <percentage> | none | inherit",
     "max-width"                     : "<length> | <percentage> | none | inherit",
     "min-height"                    : "<length> | <percentage> | inherit",
     "min-width"                     : "<length> | <percentage> | inherit",
     "move-to"                       : 1,
-    
+
     //N
     "nav-down"                      : 1,
     "nav-index"                     : 1,
     "nav-left"                      : 1,
     "nav-right"                     : 1,
     "nav-up"                        : 1,
-    
+
     //O
     "opacity"                       : "<number> | inherit",
+    "order"                         : "<integer>",
+    "-webkit-order"                 : "<integer>",
     "orphans"                       : "<integer> | inherit",
     "outline"                       : 1,
     "outline-color"                 : "<color> | invert | inherit",
@@ -3894,9 +3960,10 @@ var Properties = {
     "outline-width"                 : "<border-width> | inherit",
     "overflow"                      : "visible | hidden | scroll | auto | inherit",
     "overflow-style"                : 1,
+    "overflow-wrap"                 : "normal | break-word",
     "overflow-x"                    : 1,
     "overflow-y"                    : 1,
-    
+
     //P
     "padding"                       : { multi: "<padding-width> | inherit", max: 4 },
     "padding-bottom"                : "<padding-width> | inherit",
@@ -3921,10 +3988,10 @@ var Properties = {
     "position"                      : "static | relative | absolute | fixed | inherit",
     "presentation-level"            : 1,
     "punctuation-trim"              : 1,
-    
+
     //Q
     "quotes"                        : 1,
-    
+
     //R
     "rendering-intent"              : 1,
     "resize"                        : 1,
@@ -3939,8 +4006,9 @@ var Properties = {
     "ruby-overhang"                 : 1,
     "ruby-position"                 : 1,
     "ruby-span"                     : 1,
-    
+
     //S
+    "shape-rendering"               : "auto | optimizeSpeed | crispEdges | geometricPrecision | inherit",
     "size"                          : 1,
     "speak"                         : "normal | none | spell-out | inherit",
     "speak-header"                  : "once | always | inherit",
@@ -3948,9 +4016,20 @@ var Properties = {
     "speak-punctuation"             : "code | none | inherit",
     "speech-rate"                   : 1,
     "src"                           : 1,
+    "stop-color"                    : 1,
+    "stop-opacity"                  : "<number> | inherit",
     "stress"                        : 1,
     "string-set"                    : 1,
-    
+    "stroke"                        : 1,
+    "stroke-dasharray"              : 1,
+    "stroke-dashoffset"             : "<percentage> | <length> | inherit",
+    "stroke-linecap"                : "butt | round | square | inherit",
+    "stroke-linejoin"               : "miter | round | bevel | inherit",
+    "stroke-miterlimit"             : "<number> | inherit",
+    "stroke-opacity"                : "<number> | inherit",
+    "stroke-width"                  : "<percentage> | <length> | inherit",
+
+    //T
     "table-layout"                  : "auto | fixed | inherit",
     "tab-size"                      : "<integer> | <length>",
     "target"                        : 1,
@@ -3959,6 +4038,7 @@ var Properties = {
     "target-position"               : 1,
     "text-align"                    : "left | right | center | justify | inherit" ,
     "text-align-last"               : 1,
+    "text-anchor"                   : "start | middle | end | inherit",
     "text-decoration"               : 1,
     "text-emphasis"                 : 1,
     "text-height"                   : 1,
@@ -3971,6 +4051,8 @@ var Properties = {
     "text-transform"                : "capitalize | uppercase | lowercase | none | inherit",
     "text-wrap"                     : "normal | none | avoid",
     "top"                           : "<margin-width> | inherit",
+    "-ms-touch-action"              : "auto | none | pan-x | pan-y",
+    "touch-action"                  : "auto | none | pan-x | pan-y",
     "transform"                     : 1,
     "transform-origin"              : 1,
     "transform-style"               : 1,
@@ -3979,12 +4061,12 @@ var Properties = {
     "transition-duration"           : 1,
     "transition-property"           : 1,
     "transition-timing-function"    : 1,
-    
+
     //U
-    "unicode-bidi"                  : "normal | embed | bidi-override | inherit",
+    "unicode-bidi"                  : "normal | embed | isolate | bidi-override | isolate-override | plaintext | inherit",
     "user-modify"                   : "read-only | read-write | write-only | inherit",
     "user-select"                   : "none | text | toggle | element | elements | all | inherit",
-    
+
     //V
     "vertical-align"                : "auto | use-script | baseline | sub | super | top | text-top | central | middle | bottom | text-bottom | <percentage> | <length>",
     "visibility"                    : "visible | hidden | collapse | inherit",
@@ -3997,7 +4079,7 @@ var Properties = {
     "voice-stress"                  : 1,
     "voice-volume"                  : 1,
     "volume"                        : 1,
-    
+
     //W
     "white-space"                   : "normal | pre | nowrap | pre-wrap | pre-line | inherit | -pre-wrap | -o-pre-wrap | -moz-pre-wrap | -hp-pre-wrap", //http://perishablepress.com/wrapping-content/
     "white-space-collapse"          : 1,
@@ -4005,47 +4087,14 @@ var Properties = {
     "width"                         : "<length> | <percentage> | auto | inherit" ,
     "word-break"                    : "normal | keep-all | break-all",
     "word-spacing"                  : "<length> | normal | inherit",
-    "word-wrap"                     : 1,
-    
+    "word-wrap"                     : "normal | break-word",
+    "writing-mode"                  : "horizontal-tb | vertical-rl | vertical-lr | lr-tb | rl-tb | tb-rl | bt-rl | tb-lr | bt-lr | lr-bt | rl-bt | lr | rl | tb | inherit",
+
     //Z
     "z-index"                       : "<integer> | auto | inherit",
-    "zoom"                          : "<number> | <percentage> | normal",
-  
-    //SVG RELATED KEYWORDS
-    "clip-path"                     : "",
-    "clip-rule"                     : "",
-    "color-interpolation-filters"   : "",
-    "color-interpolation"           : "",
-    "color-rendering"               : "",
-    "enable-background"             : "",
-    "fill-opacity"                  : "",
-    "fill-rule"                     : "",
-    "fill"                          : "<color> | none",
-    "flood-color"                   : "",
-    "flood-opacity"                 : "",
-    "glyph-orientation-horizontal"  : "",
-    "glyph-orientation-vertical"    : "",
-    "kerning"                       : "",
-    "lighting-color"                : "",
-    "marker-end"                    : "",
-    "marker-mid"                    : "",
-    "marker-start"                  : "",
-    "marker"                        : "",
-    "mask"                          : "",
-    "shape-rendering"               : "",
-    "stop-color"                    : "<color>",
-    "stop-opacity"                  : "",
-    "stroke-dasharray"              : "",
-    "stroke-dashoffset"             : "",
-    "stroke-linecap"                : "",
-    "stroke-linejoin"               : "",
-    "stroke-miterlimit"             : "",
-    "stroke-opacity"                : "",
-    "stroke-width"                  : "<stroke-width>",
-    "stroke"                        : "<color> | none",
-    "text-anchor"                   : "",
-    "writing-mode"                  : ""
+    "zoom"                          : "<number> | <percentage> | normal"
 };
+
 
 /*global SyntaxUnit, Parser*/
 /**
