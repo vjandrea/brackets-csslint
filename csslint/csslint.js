@@ -4020,7 +4020,7 @@ var Properties = {
     "enable-background"             : "",
     "fill-opacity"                  : "",
     "fill-rule"                     : "",
-    "fill"                          : "",
+    "fill"                          : "<color>",
     "flood-color"                   : "",
     "flood-opacity"                 : "",
     "glyph-orientation-horizontal"  : "",
@@ -4033,7 +4033,7 @@ var Properties = {
     "marker"                        : "",
     "mask"                          : "",
     "shape-rendering"               : "",
-    "stop-color"                    : "",
+    "stop-color"                    : "<color>",
     "stop-opacity"                  : "",
     "stroke-dasharray"              : "",
     "stroke-dashoffset"             : "",
@@ -4041,8 +4041,8 @@ var Properties = {
     "stroke-linejoin"               : "",
     "stroke-miterlimit"             : "",
     "stroke-opacity"                : "",
-    "stroke-width"                  : "",
-    "stroke"                        : "",
+    "stroke-width"                  : "<number>",
+    "stroke"                        : "<color>",
     "text-anchor"                   : "",
     "writing-mode"                  : ""
 };
