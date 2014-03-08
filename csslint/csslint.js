@@ -4020,7 +4020,7 @@ var Properties = {
     "enable-background"             : "",
     "fill-opacity"                  : "",
     "fill-rule"                     : "",
-    "fill"                          : "<color>",
+    "fill"                          : "<color> | none",
     "flood-color"                   : "",
     "flood-opacity"                 : "",
     "glyph-orientation-horizontal"  : "",
@@ -4041,8 +4041,8 @@ var Properties = {
     "stroke-linejoin"               : "",
     "stroke-miterlimit"             : "",
     "stroke-opacity"                : "",
-    "stroke-width"                  : "<number>",
-    "stroke"                        : "<color>",
+    "stroke-width"                  : "<border-width>", // maybe a separate <stroke-width> parser may be better
+    "stroke"                        : "<color> | none",
     "text-anchor"                   : "",
     "writing-mode"                  : ""
 };
